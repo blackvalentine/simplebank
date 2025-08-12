@@ -1,26 +1,14 @@
-include .env
-export
-
-DB_URL=postgresql://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)
-
 postgres:
-	docker run --name postgres12 \
-		-p $(DB_PORT):5432 \
-		-e POSTGRES_USER=$(DB_USER) \
-		-e POSTGRES_PASSWORD=$(DB_PASS) \
-		-d postgres:12-alpine
-
+	docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
 createdb:
-	docker exec -it postgres12 createdb --username=$(DB_USER) --owner=$(DB_USER) $(DB_NAME)
-
+	docker exec -it postgres12 createdb --username=root --owner=root simplebank
 dropdb:
-	docker exec -it postgres12 dropdb --username=$(DB_USER) $(DB_NAME)
+	docker exec -it postgres12 dropdb --username=root simplebank
 
 migrateup:
-	migrate -path db/migration -database "$(DB_URL)" -verbose up
-
+	migrate -path db/migration -database "postgresql://root:secret@192.168.0.102:5432/simplebank?sslmode=disable" -verbose up
 migratedown:
-	migrate -path db/migration -database "$(DB_URL)" -verbose down
+	migrate -path db/migration -database "postgresql://root:secret@192.168.0.102:5432/simplebank?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate
