@@ -1,10 +1,8 @@
 module github.com/blackvalentine/simplebank
 
-go 1.24.0
+go 1.23
 
 require github.com/lib/pq v1.10.9
-
-require github.com/joho/godotenv v1.5.1
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
